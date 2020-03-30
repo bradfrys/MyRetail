@@ -1,11 +1,10 @@
 package com.target.myretail.controller
 
+import com.target.myretail.model.StorePriceRequestBody
 import com.target.myretail.service.ProductDetailsService
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController("/")
 class RetailController(val productDetailsService: ProductDetailsService) {
@@ -19,6 +18,10 @@ class RetailController(val productDetailsService: ProductDetailsService) {
         return ok().body(productDetailsService.hydrateProductDetails(productId))
     }
 
-    //TODO trace PUT endpoint?
+    @PutMapping(path = ["/products/{id}"], produces = ["application/json"])
+    fun saveProductPrice(@PathVariable("id") productId: String,
+                         @RequestBody storePriceRequest: StorePriceRequestBody): ResponseEntity<Any> {
+        return ok().body(productDetailsService.storeProductPrice(productId, storePriceRequest))
+    }
 
 }

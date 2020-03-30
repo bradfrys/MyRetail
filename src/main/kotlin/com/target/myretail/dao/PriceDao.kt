@@ -16,4 +16,8 @@ class PriceDao(private val database: CassandraTemplate) {
 
     fun getProductPriceAndCurrencyById(productId: String): PriceRow? = database.selectOne(query(where("product_id").`is`(productId)))
 
+    fun saveProductPriceAndCurrencyForId(productId: String, value: Double, currencyCode: String): PriceRow = database.insert(
+        PriceRow(productId, value, currencyCode)
+    )
+
 }
