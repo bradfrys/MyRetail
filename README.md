@@ -54,10 +54,15 @@ CREATE TABLE IF NOT EXISTS my_retail.price_table (
 );
 ```
 
-###Verify and start application
+### Verify and start application
 You can confirm the table was created correctly with the following insert and select CQL statements.
 ```genericsql
 INSERT INTO my_retail.price_table("product_id", "value", "currency_code") VALUES ('13860428', 13.49, 'USD');
+INSERT INTO my_retail.price_table("product_id", "value", "currency_code") VALUES ('79292322', 15.88, 'CAD');
+INSERT INTO my_retail.price_table("product_id", "value", "currency_code") VALUES ('78782004', 20.62, 'USD');
+INSERT INTO my_retail.price_table("product_id", "value", "currency_code") VALUES ('77289223', 166.0, 'USD');
+INSERT INTO my_retail.price_table("product_id", "value", "currency_code") VALUES ('76615169', 99.01, 'CAD');
+INSERT INTO my_retail.price_table("product_id", "value", "currency_code") VALUES ('79368889', 42.24, 'BTC');
 SELECT * FROM my_retail.price_table;
 ```
 
