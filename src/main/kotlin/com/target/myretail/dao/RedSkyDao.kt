@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 @Component
 class RedSkyDao {
 
-    fun getProductNameById(productId: Int): String {
+    fun getProductNameById(productId: String): String {
         return "name" //TODO add real redsky call
     }
 
