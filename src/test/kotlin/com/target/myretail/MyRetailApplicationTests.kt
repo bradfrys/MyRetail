@@ -8,6 +8,7 @@ class MyRetailApplicationTests {
 
 	@Test
 	fun contextLoads() {
+		//TODO write some tests?
 	}
 
 }
