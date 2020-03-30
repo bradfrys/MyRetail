@@ -79,6 +79,7 @@ I would've liked to included the following;
 - Unit tests for each class (happy/sad paths)
 - Error handling (Global exception handler to provide useful responses)
 - Security (Spring provides LDAP features, but would need to match whatever standard policy is)
+- ASYNC!
 
 #### NICE-to-have's (things I consider "standard"):
 - Integration tests for each request path (controller -> service -> DAO)
