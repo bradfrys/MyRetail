@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
 
-@RestController("/")
+@RestController
 class RetailController(val productDetailsService: ProductDetailsService) {
 
     /**
@@ -14,9 +14,8 @@ class RetailController(val productDetailsService: ProductDetailsService) {
      * and returns the product's name and pricing information.
      */
     @GetMapping(path = ["/products/{id}"], produces = ["application/json"])
-    fun getProductDetailsById(@PathVariable("id") productId: String): ResponseEntity<Any> {
-        return ok().body(productDetailsService.hydrateProductDetails(productId))
-    }
+    fun getProductDetailsById(@PathVariable("id") productId: String): ResponseEntity<Any> =
+        ok().body(productDetailsService.hydrateProductDetails(productId))
 
     /**
      * Basic PUT endpoint, accepts one ProductId as a path variable,
@@ -26,8 +25,7 @@ class RetailController(val productDetailsService: ProductDetailsService) {
      */
     @PutMapping(path = ["/products/{id}"], produces = ["application/json"])
     fun saveProductPrice(@PathVariable("id") productId: String,
-                         @RequestBody storePriceRequest: StorePriceRequestBody): ResponseEntity<Any> {
-        return ok().body(productDetailsService.storeProductPrice(productId, storePriceRequest))
-    }
+                         @RequestBody storePriceRequest: StorePriceRequestBody): ResponseEntity<Any> =
+        ok().body(productDetailsService.storeProductPrice(productId, storePriceRequest))
 
 }

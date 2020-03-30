@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class MyRetailApplicationTests {
 
-//	@Test
-//	fun contextLoads() {
-//		//TODO write some tests?
-//	}
+	@Test
+	fun contextLoads() {
+		//TODO write some tests?
+	}
 
 }
