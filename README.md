@@ -1,5 +1,8 @@
+# Running this demo
+To run this project, use ```./gradlew bootRun``` once you have a Cassandra instance to connect to. (see below for Docker instructions)
+
 ## Local Cassandra Container
-Setup for testing with a local docker Cassandra instance
+Setup for testing with a local Docker Cassandra instance.
 
 The following steps will likely work with the most recent version of the DSE Cassandra Docker image, but a version matching the application's DSE libraries is preferable. These instructions can easily be adapted to create DSE containers for other applications; use the same container configurations and change the DSE configuration as needed.
 
@@ -65,5 +68,23 @@ INSERT INTO my_retail.price_table("product_id", "value", "currency_code") VALUES
 INSERT INTO my_retail.price_table("product_id", "value", "currency_code") VALUES ('79368889', 42.24, 'BTC');
 SELECT * FROM my_retail.price_table;
 ```
-
 Run this application with the default configuration to use the Cassandra Container.
+
+# Conclusion/Retrospecitve notes:
+
+This is a proof of concept, *not* a production ready service. Given a full sprint/development cycle,
+I would've liked to included the following;
+
+#### NEED-to-have's (bare minimum):
+- Unit tests for each class (happy/sad paths)
+- Error handling (Global exception handler to provide useful responses)
+- Security (Spring provides LDAP features, but would need to match whatever standard policy is)
+
+#### NICE-to-have's (things I consider "standard"):
+- Integration tests for each request path (controller -> service -> DAO)
+- Code style and test coverage verification (checktyle/jacoco gradle plugins)
+- Automated CI/CD pipeline with steps for testing and deployment
+- Embedded Cassandra (instead of a local Docker container) for testing
+- A more organized model's package, it's the least cohesive portion of this service
+- Better documentation (Postman collection or Swagger-ui, both allow for ease of testing)
+- Logging configuration optimization (setting levels based on testing and support scenarios, storing logs)

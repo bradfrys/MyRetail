@@ -12,6 +12,10 @@ import org.springframework.web.util.UriTemplate
  * I would expect this to be an independent service (likely in a lib), but here
  * it's acting as a logical data access object, so I'm treating it as such.
  * It could be any kind of back-end for data storage, ie another c* table.
+ *
+ * Presumably, the data that's being retrieved has already been validated,
+ * (either before being stored initially, or by the RedSky service)
+ * otherwise, this class or RedSkyResponse.kt would be the place to include validation.
  */
 @Component
 class RedSkyDao(val httpClient: RestTemplate) {

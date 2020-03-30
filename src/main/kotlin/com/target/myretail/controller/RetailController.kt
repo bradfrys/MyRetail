@@ -18,6 +18,12 @@ class RetailController(val productDetailsService: ProductDetailsService) {
         return ok().body(productDetailsService.hydrateProductDetails(productId))
     }
 
+    /**
+     * Basic PUT endpoint, accepts one ProductId as a path variable,
+     * and pricing information in a request body. Something this specific
+     * would feel more at home in a service dedicated to pricing information storage,
+     * but I included it here for the demo bonus. See StorePriceRequestBody.kt
+     */
     @PutMapping(path = ["/products/{id}"], produces = ["application/json"])
     fun saveProductPrice(@PathVariable("id") productId: String,
                          @RequestBody storePriceRequest: StorePriceRequestBody): ResponseEntity<Any> {

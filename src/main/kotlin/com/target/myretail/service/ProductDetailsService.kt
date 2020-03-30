@@ -16,7 +16,7 @@ class ProductDetailsService(val redSkyDao: RedSkyDao, val priceDao: PriceDao) {
 
     /**
      * Calls cassandra for price data, then calls RedSky for product name,
-     * returning the aggregate information.
+     * and returns the aggregate information.
      */
     fun hydrateProductDetails(productId: String): Product {
         val priceDetailRow = priceDao.getProductPriceAndCurrencyById(productId)
@@ -29,7 +29,12 @@ class ProductDetailsService(val redSkyDao: RedSkyDao, val priceDao: PriceDao) {
 
     /**
      * Stores price data to cassandra. Validation could be done here, or at the annotation
-     * level in StorePriceRequestBody.kt or PriceRow.kt.
+     * level in StorePriceRequestBody.kt or PriceRow.kt, and returns the information
+     * that was inserted into the table.
+     *
+     * I debated calling the PriceDao.saveProductPrice() from the controller directly,
+     * but stayed within my existing structure for consistency's sake.
+     * There could be some hypothetical aggregation happening here.
      */
     fun storeProductPrice(productId: String, storePriceRequest: StorePriceRequestBody): PriceRow {
         return priceDao.saveProductPriceAndCurrencyForId(productId, storePriceRequest.value, storePriceRequest.currencyCode)
