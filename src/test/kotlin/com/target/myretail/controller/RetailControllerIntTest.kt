@@ -1,5 +1,6 @@
 package com.target.myretail.controller
 
+import com.target.myretail.config.SecurityConfig.Companion.DEVELOPER_ROLE
 import com.target.myretail.dao.PriceDao
 import com.target.myretail.dao.RedSkyDao
 import com.target.myretail.model.PriceRow
@@ -13,6 +14,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.security.test.context.support.WithAnonymousUser
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -35,6 +38,7 @@ class RetailControllerIntTest {
     @Before fun setup() = initMocks(this)
 
     @Test
+    @WithMockUser(roles = [DEVELOPER_ROLE])
     fun `should return results for getProductDetailsById`() {
         `when`(mockPriceDao.getProductPriceAndCurrencyById(PRODUCT_ID)).thenReturn(row)
         `when`(mockRedSkyDao.getProductNameById(PRODUCT_ID)).thenReturn(PRODUCT_NAME)
@@ -45,6 +49,7 @@ class RetailControllerIntTest {
     }
 
     @Test
+    @WithMockUser(roles = [DEVELOPER_ROLE])
     fun `should return results for saveProductPrice`() {
         `when`(mockPriceDao.saveProductPriceAndCurrencyForId(PRODUCT_ID, PRICE, CURRENCY_CODE)).thenReturn(row)
         mockMvc.perform(put("/products/$PRODUCT_ID")
@@ -54,6 +59,22 @@ class RetailControllerIntTest {
             .andExpect(jsonPath("productId").value(PRODUCT_ID))
             .andExpect(jsonPath("value").value(PRICE))
             .andExpect(jsonPath("currencyCode").value(CURRENCY_CODE))
+    }
+
+    @Test
+    @WithAnonymousUser
+    fun `should deny getProductDetailsById to anon user`() {
+        mockMvc.perform(get("/products/$PRODUCT_ID"))
+            .andExpect(status().isUnauthorized)
+    }
+
+    @Test
+    @WithAnonymousUser
+    fun `should deny saveProductPrice to anon user`() {
+        mockMvc.perform(put("/products/$PRODUCT_ID")
+            .content(STORE_PRICE_REQ_BODY)
+            .contentType(APPLICATION_JSON))
+            .andExpect(status().isUnauthorized)
     }
 
     private companion object { // Test values, stored here for consistency
