@@ -1,7 +1,7 @@
 package com.target.myretail.dao
 
 import com.target.myretail.model.RedSkyResponse
-import org.springframework.http.RequestEntity
+import org.springframework.http.RequestEntity.*
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
@@ -23,12 +23,9 @@ class RedSkyDao(val httpClient: RestTemplate) {
     private val productDetailsUrl: UriTemplate = UriTemplate("https://redsky.target.com/v2/pdp/tcin/{productId}")
 
     fun getProductNameById(productId: String): String {
-        val request = RequestEntity.get(productDetailsUrl.expand(productId)).build()
+        val request = get(productDetailsUrl.expand(productId)).build()
         val response = httpClient.exchange<RedSkyResponse>(request)
-        return if (response.statusCode.is2xxSuccessful)
-            response.body!!.product.item.description.productName
-        else // Handles non-200ok responses, does not handle missing fields with 200ok
-            "Name not Found."
+        return response.body!!.product.item.description.productName
     }
 
 }

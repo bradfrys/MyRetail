@@ -14,8 +14,11 @@ import org.springframework.stereotype.Repository
 @Repository
 class PriceDao(private val database: CassandraTemplate) {
 
-    fun getProductPriceAndCurrencyById(productId: String): PriceRow? = database.selectOne(query(where("product_id").`is`(productId)))
+    fun getProductPriceAndCurrencyById(productId: String): PriceRow =
+        database.selectOne(query(where("product_id").`is`(productId)))
+            ?: PriceRow(productId, 0.0, "Price not found.")
 
-    fun saveProductPriceAndCurrencyForId(productId: String, value: Double, currencyCode: String): PriceRow = database.insert(PriceRow(productId, value, currencyCode))
+    fun saveProductPriceAndCurrencyForId(productId: String, value: Double, currencyCode: String): PriceRow =
+        database.insert(PriceRow(productId, value, currencyCode))
 
 }

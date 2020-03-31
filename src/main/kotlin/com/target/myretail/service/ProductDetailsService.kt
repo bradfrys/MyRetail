@@ -5,6 +5,7 @@ import com.target.myretail.dao.RedSkyDao
 import com.target.myretail.model.PriceRow
 import com.target.myretail.model.Product
 import com.target.myretail.model.StorePriceRequestBody
+import org.slf4j.LoggerFactory.*
 import org.springframework.stereotype.Service
 
 /**
@@ -14,17 +15,20 @@ import org.springframework.stereotype.Service
 @Service
 class ProductDetailsService(val redSkyDao: RedSkyDao, val priceDao: PriceDao) {
 
+    private val log = getLogger(ProductDetailsService::class.java)
+
     /**
      * Calls cassandra for price data, then calls RedSky for product name,
      * and returns the aggregate information.
      */
     fun hydrateProductDetails(productId: String): Product {
         val priceDetailRow = priceDao.getProductPriceAndCurrencyById(productId)
+        log.info("Retrieved price details for ID $productId: $priceDetailRow")
+
         val productName = redSkyDao.getProductNameById(productId)
-        return if (priceDetailRow != null)
-            Product(productId, productName, Pair(priceDetailRow.value, priceDetailRow.currencyCode))
-        else
-            Product(productId, productName, Pair(0.0, "Price not found."))
+        log.info("Retrieved product name for ID $productId: $productName")
+
+        return Product(productId, productName, Pair(priceDetailRow.value, priceDetailRow.currencyCode))
     }
 
     /**
@@ -37,7 +41,9 @@ class ProductDetailsService(val redSkyDao: RedSkyDao, val priceDao: PriceDao) {
      * There could be some hypothetical aggregation happening here.
      */
     fun storeProductPrice(productId: String, storePriceRequest: StorePriceRequestBody): PriceRow {
-        return priceDao.saveProductPriceAndCurrencyForId(productId, storePriceRequest.value, storePriceRequest.currencyCode)
+        val storedPriceRow = priceDao.saveProductPriceAndCurrencyForId(productId, storePriceRequest.value, storePriceRequest.currencyCode)
+        log.info("Stored price details for ID $productId: $storedPriceRow")
+        return storedPriceRow
     }
 
 }
