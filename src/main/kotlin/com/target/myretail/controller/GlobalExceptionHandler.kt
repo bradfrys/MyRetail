@@ -22,7 +22,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler
     fun handleException(ex: Exception): ResponseEntity<Any> {
-        log.error("An error has occured", ex)
+        log.error("An error has occurred", ex)
         return status(INTERNAL_SERVER_ERROR).body(ex.message)
     }
 
